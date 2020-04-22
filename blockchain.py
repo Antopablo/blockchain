@@ -114,6 +114,7 @@ class Blockchain(object):
 
 # Instanciation de notre noeud
 app = Flask(__name__)
+app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False
 
 # Génération d'une unique adresse globale pour ce noeud
 node_identifier = str(uuid4()).replace('-','')
@@ -123,9 +124,11 @@ blockchain = Blockchain()
 
 @app.route('/mine', methods=['GET'])
 def mine():
+
+
     # Nous faisons fonctionner l'algo de la Preuve De Travail pour avoir la prochaine preuve
     last_block = blockchain.last_block
-    last_proof = blockchain.last_block['proof']
+    last_proof = last_block['proof']
     proof = blockchain.proof_of_work(last_proof)
 
     # Nous devons recevoir une récompense pour avoir trouver la preuve
@@ -146,7 +149,7 @@ def mine():
     }
     return jsonify(response), 200
 
-@app.route('/transaction/new', methods=['POST'])
+@app.route('/transactions/new', methods=['POST'])
 def new_transaction():
     values = request.get_json()
 
@@ -172,4 +175,4 @@ def full_chain():
     return jsonify(response),200
     
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='127.0.0.1', port=5000)
