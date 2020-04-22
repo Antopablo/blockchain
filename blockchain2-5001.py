@@ -109,6 +109,7 @@ class Blockchain(object):
         en remplaçant notre chaine par la plus longue chaine du réseau.
         :return: <bool> True si notre chaine a été remplacé, sinon False.
         """
+
         neighbours = self.nodes
         new_chain = None
 
@@ -118,11 +119,11 @@ class Blockchain(object):
         # Récupère et vérifie que les chaines de tous les noeuds de notre réseau
         for node in neighbours:
             response = requests.get(f'http://{node}/chain')
-            print(response.status_code)
+
             if response.status_code == 200:
                 lenght = response.json()['length']
                 chain = response.json()['chain']
-
+                
                 # Vérifie si la longueur est la plus longue et si la chaine est valide
                 if lenght > max_lenght and self.valid_chain(chain):
                     max_lenght = lenght
@@ -295,7 +296,7 @@ if __name__ == '__main__':
     from argparse import ArgumentParser
 
     parser = ArgumentParser()
-    parser.add_argument('-p', '--port', default=5000, type=int, help='port to listen on')
+    parser.add_argument('-p', '--port', default=5001, type=int, help='port to listen on')
     args = parser.parse_args()
     port = args.port
 
